@@ -2,16 +2,16 @@
   "name": "Angular grunt seed",
   "version": "0.0.1",
   "dependencies": {
-    "jquery": "2.0.3",
+    "jquery": "2.1.0",
     "lodash": "2.4.1",
 
     "angular": "1.2.10",
     "angular-resource": "1.2.10",
     "angular-animate": "1.2.10",
     "angular-ui-router": "git+https://github.com/angular-ui/ui-router.git#cf3427162b5b4209a9feefb71ef4c54d2901514b",
-    "angular-bindonce": "0.2.2",
+    "angular-bindonce": "0.3.0",
 
-    "bootstrap": "3.0.3",
+    "bootstrap": "3.1.0",
     "font-awesome": "4.0.3"
   },
   "devDependencies": {
