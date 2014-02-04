@@ -21,6 +21,7 @@ module.exports = (config) ->
       "bower_components/angular-bindonce/bindonce.js"
 
       "bower_components/sinon/lib/sinon.js"
+      "bower_components/sinon/lib/sinon/behavior.js"
       "bower_components/sinon/lib/sinon/call.js"
       "bower_components/sinon/lib/sinon/spy.js"
       "bower_components/sinon/lib/sinon/stub.js"
