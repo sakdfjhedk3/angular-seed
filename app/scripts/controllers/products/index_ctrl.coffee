@@ -3,13 +3,14 @@ class IndexCtrl
   @$inject = ["$scope", "alerts", "Products"]
   constructor: (@$scope, @alerts, @Products) ->
     $scope.totalServerItems = 0
+    $scope.selectedProducts = []
 
-    fetchProducts = (pagingOptions = {}, sortInfo = {}) ->
-      options = _.pick(pagingOptions, "currentPage", "pageSize")
-      options.sortField = sortInfo.fields[0]
-      options.sortDirection = sortInfo.directions[0]
+    fetchProducts = ->
+      params = _.pick($scope.pagingOptions, "currentPage", "pageSize")
+      params.sortField = $scope.sortInfo.fields[0]
+      params.sortDirection = $scope.sortInfo.directions[0]
 
-      promise = Products.query(options).$promise
+      promise = Products.query(params).$promise
       promise.then (data) ->
         $scope.products = data.rows
         $scope.totalServerItems = data.total
@@ -24,16 +25,16 @@ class IndexCtrl
       directions: ["asc"]
 
     $scope.gridColumnDefs = [
-      { field: "id", displayName: "#", width: "auto" }
-      { field: "name", displayName: "Name", resizable: true }
-      { field: "price", displayName: "Price", width: "120px", resizable: false }
+      { field: "id",          displayName: "#", width: "auto" }
+      { field: "name",        displayName: "Name", resizable: true }
+      { field: "price",       displayName: "Price", width: "120px", resizable: false }
       { field: "description", displayName: "Description" }
-      { field: "createdAt", displayName: "Created At" }
+      { field: "createdAt",   displayName: "Created At" }
     ]
 
     $scope.gridOptions =
       data: "products"
-      columnDefs: "gridColumnDefs"
+      columnDefs: $scope.gridColumnDefs
       totalServerItems: "totalServerItems"
       enableColumnResize: true
       enablePaging: true
@@ -41,17 +42,22 @@ class IndexCtrl
       sortInfo: $scope.sortInfo
       useExternalSorting: true
       showFooter: true
+      primaryKey: "id"
+      multiSelect: true
+      selectedItems: $scope.selectedProducts
 
-    refresh = (newVal, oldVal) ->
-      return if angular.equals(newVal, oldVal)
-      fetchProducts($scope.pagingOptions, $scope.sortInfo)
+    loadGrid = (newVal, oldVal) ->
+      fetchProducts() unless angular.equals(newVal, oldVal)
 
-    $scope.$watch "pagingOptions.currentPage", refresh, true
-    $scope.$watch "pagingOptions.pageSize", refresh, true
-    $scope.$watch "sortInfo.fields", refresh, true
-    $scope.$watch "sortInfo.directions", refresh, true
+    $scope.$watch "pagingOptions.currentPage", loadGrid, true
+    $scope.$watch "pagingOptions.pageSize", loadGrid, true
+    $scope.$watch "sortInfo.fields", loadGrid, true
+    $scope.$watch "sortInfo.directions", loadGrid, true
 
-    fetchProducts($scope.pagingOptions, $scope.sortInfo)
+    fetchProducts()
+
+  clearSelection: ->
+    @$scope.selectedProducts.splice(0, @$scope.selectedProducts.length)
 
   deleteProduct: (product) ->
     promise = product.$delete()
