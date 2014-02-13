@@ -9,6 +9,7 @@
     "angular-animate": "1.2.12",
     "angular-ui-router": "git+https://github.com/angular-ui/ui-router.git#cf3427162b5b4209a9feefb71ef4c54d2901514b",
     "angular-bindonce": "0.3.0",
+    "ng-grid": "2.0.7",
     "bootstrap": "3.1.0",
     "font-awesome": "4.0.3"
   },
@@ -21,6 +22,10 @@
       "/": [
         "release/angular-ui-router.js"
       ]
+    },
+    "ng-grid": {
+      "css": "ng-grid.css",
+      "js": "build/ng-grid.js"
     },
     "font-awesome": {
       "css": [
