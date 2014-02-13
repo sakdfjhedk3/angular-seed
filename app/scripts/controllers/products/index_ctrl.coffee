@@ -4,18 +4,24 @@ class IndexCtrl
   constructor: (@$scope, @alerts, @Products) ->
     $scope.totalServerItems = 0
 
-    fetchProducts = (pagingOptions = {}) ->
+    fetchProducts = (pagingOptions = {}, sortInfo = {}) ->
       options = _.pick(pagingOptions, "currentPage", "pageSize")
-      promise = Products.query(options).$promise
+      options.sortField = sortInfo.fields[0]
+      options.sortDirection = sortInfo.directions[0]
 
+      promise = Products.query(options).$promise
       promise.then (data) ->
         $scope.products = data.rows
         $scope.totalServerItems = data.total
 
     $scope.pagingOptions =
       pageSizes: [2, 3, 5]
-      pageSize: 2
       currentPage: 1
+      pageSize: 2
+
+    $scope.sortInfo =
+      fields: ["id"]
+      directions: ["asc"]
 
     $scope.gridColumnDefs = [
       { field: "id", displayName: "#", width: "auto" }
@@ -32,15 +38,20 @@ class IndexCtrl
       enableColumnResize: true
       enablePaging: true
       pagingOptions: $scope.pagingOptions
+      sortInfo: $scope.sortInfo
+      useExternalSorting: true
       showFooter: true
 
-    watchPaging = (pagingOptions, oldVal) ->
-      return if pagingOptions is oldVal
-      fetchProducts(pagingOptions)
+    refresh = (newVal, oldVal) ->
+      return if angular.equals(newVal, oldVal)
+      fetchProducts($scope.pagingOptions, $scope.sortInfo)
 
-    $scope.$watch "pagingOptions", watchPaging, true
+    $scope.$watch "pagingOptions.currentPage", refresh, true
+    $scope.$watch "pagingOptions.pageSize", refresh, true
+    $scope.$watch "sortInfo.fields", refresh, true
+    $scope.$watch "sortInfo.directions", refresh, true
 
-    fetchProducts(currentPage: 1, pageSize: 2)
+    fetchProducts($scope.pagingOptions, $scope.sortInfo)
 
   deleteProduct: (product) ->
     promise = product.$delete()
