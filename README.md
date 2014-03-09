@@ -4,6 +4,9 @@
 [![Dependency Status](https://gemnasium.com/lucassus/angular-seed.png)](https://gemnasium.com/lucassus/angular-seed)
 [![Stories in Ready](https://badge.waffle.io/lucassus/angular-seed.png?label=ready)](https://waffle.io/lucassus/angular-seed)
 
+
+ But does it blend?!
+ 
 This is a custom AngularJS seed project based on grunt the JavaScript task runner.
 
 * AngularJS 1.2.0
